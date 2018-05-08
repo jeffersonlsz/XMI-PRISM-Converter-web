@@ -1,2 +1,3 @@
 launch\Main.class
+servlet\FileUploadServlet.class
 servlet\HelloServlet.class
