@@ -8,5 +8,7 @@
 </head>
 <body>
     <h2>${requestScope.message}</h2>
+
+	<p>${requestScope.prism}</p>
 </body>
 </html>

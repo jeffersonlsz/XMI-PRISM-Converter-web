@@ -2,6 +2,8 @@ package servlet;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -48,24 +50,35 @@ public class FileUploadServlet extends HttpServlet {
             System.out.println(fileName);
 //            // refines the fileName in case it is an absolute path
               fileName = new File(fileName).getName();
-              part.write(savePath + fileName);
+              part.write(savePath +File.separator + fileName);
               ffile = fileName;
         }
         
-        System.out.println("tooooooo: "+savePath + ffile);
-        File uploadedFile = new File(savePath + ffile);
+        System.out.println("tooooooo: "+savePath+File.separator + ffile);
+        File uploadedFile = new File(savePath + File.separator + ffile);
         if(uploadedFile.exists()){
         	System.out.println("++++ "+uploadedFile.getAbsolutePath() + " +++++");
         }else{ 
         	System.out.println("something weeeent wrooooong");
         }
         
-        request.setAttribute("message", "Upload has been done successfully!");
+        request.setAttribute("message", "Upload has been done successfully!<br/>");
+        
+        
+        //execute XMI2PRISM on the generated file....
+        
+        System.out.println("run on: " + uploadedFile.getAbsolutePath());
+        Process proc = Runtime.getRuntime().exec("java -jar libs/xtp.jar "+uploadedFile.getAbsolutePath());
+        System.out.println("err: " + proc.getErrorStream().toString() + 
+        		      " out: "+ proc.getOutputStream().toString() + 
+        		      " outputf: "+savePath + File.separator + ffile);
+        
+        ffile = ffile.substring(0, ffile.indexOf('.'))+".pm";
+        request.setAttribute("prism", new String(Files.readAllBytes(Paths.get(savePath + File.separator + ffile))));
+        
+        
         getServletContext().getRequestDispatcher("/message.jsp").forward(
                 request, response);
-        
-        
-        
     }
     /**
      * Extracts file name from HTTP header content-disposition
