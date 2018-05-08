@@ -1,9 +1,11 @@
 package servlet;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Scanner;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -74,7 +76,16 @@ public class FileUploadServlet extends HttpServlet {
         		      " outputf: "+savePath + File.separator + ffile);
         
         ffile = ffile.substring(0, ffile.indexOf('.'))+".pm";
-        request.setAttribute("prism", new String(Files.readAllBytes(Paths.get(savePath + File.separator + ffile))));
+        
+        Scanner in = new Scanner(new FileReader(savePath + File.separator +ffile));
+        StringBuilder sb = new StringBuilder();
+        while(in.hasNext()) {
+            sb.append(in.next() + "\n");
+        }
+        in.close();
+        
+        
+        request.setAttribute("prism", sb.toString());
         
         
         getServletContext().getRequestDispatcher("/message.jsp").forward(
