@@ -42,17 +42,28 @@ public class FileUploadServlet extends HttpServlet {
         if (!fileSaveDir.exists()) {
             fileSaveDir.mkdir();
         }
-//         
+         String ffile=null;
         for (Part part : request.getParts()) {
             String fileName = extractFileName(part);
             System.out.println(fileName);
 //            // refines the fileName in case it is an absolute path
               fileName = new File(fileName).getName();
               part.write(savePath + fileName);
+              ffile = fileName;
         }
+        
+        System.out.println("tooooooo: "+savePath + ffile);
+        File uploadedFile = new File(savePath + ffile);
+        if(uploadedFile.exists()){
+        	System.out.println(uploadedFile.getAbsolutePath());
+        }else System.out.println("something weeeent wrooooong");
+        
         request.setAttribute("message", "Upload has been done successfully!");
         getServletContext().getRequestDispatcher("/message.jsp").forward(
                 request, response);
+        
+        
+        
     }
     /**
      * Extracts file name from HTTP header content-disposition
