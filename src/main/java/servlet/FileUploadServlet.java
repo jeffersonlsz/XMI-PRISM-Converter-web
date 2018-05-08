@@ -80,7 +80,7 @@ public class FileUploadServlet extends HttpServlet {
         Scanner in = new Scanner(new FileReader(savePath + File.separator +ffile));
         StringBuilder sb = new StringBuilder();
         while(in.hasNext()) {
-            sb.append(in.next() + "\n");
+            sb.append(in.next() + "<br/>");
         }
         in.close();
         
