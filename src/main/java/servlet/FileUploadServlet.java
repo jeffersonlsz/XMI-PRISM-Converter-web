@@ -33,26 +33,26 @@ public class FileUploadServlet extends HttpServlet {
 //        // gets absolute path of the web application
         String appPath = request.getServletContext().getRealPath("");
 //        // constructs path of the directory to save uploaded file
-        String savePath = appPath + File.separator + SAVE_DIR;
+        String savePath = appPath  + SAVE_DIR;
         
         System.out.println("save path: " + savePath);
 //         
-//        // creates the save directory if it does not exists
-//        File fileSaveDir = new File(savePath);
-//        if (!fileSaveDir.exists()) {
-//            fileSaveDir.mkdir();
-//        }
+        // creates the save directory if it does not exists
+        File fileSaveDir = new File(savePath);
+        if (!fileSaveDir.exists()) {
+            fileSaveDir.mkdir();
+        }
 //         
         for (Part part : request.getParts()) {
             String fileName = extractFileName(part);
             System.out.println(fileName);
 //            // refines the fileName in case it is an absolute path
-//            fileName = new File(fileName).getName();
-//            part.write(savePath + File.separator + fileName);
+              fileName = new File(fileName).getName();
+              part.write(savePath + fileName);
         }
-//        request.setAttribute("message", "Upload has been done successfully!");
-//        getServletContext().getRequestDispatcher("/message.jsp").forward(
-//                request, response);
+        request.setAttribute("message", "Upload has been done successfully!");
+        getServletContext().getRequestDispatcher("/message.jsp").forward(
+                request, response);
     }
     /**
      * Extracts file name from HTTP header content-disposition
