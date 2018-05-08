@@ -55,8 +55,10 @@ public class FileUploadServlet extends HttpServlet {
         System.out.println("tooooooo: "+savePath + ffile);
         File uploadedFile = new File(savePath + ffile);
         if(uploadedFile.exists()){
-        	System.out.println(uploadedFile.getAbsolutePath());
-        }else System.out.println("something weeeent wrooooong");
+        	System.out.println("++++ "+uploadedFile.getAbsolutePath() + " +++++");
+        }else{ 
+        	System.out.println("something weeeent wrooooong");
+        }
         
         request.setAttribute("message", "Upload has been done successfully!");
         getServletContext().getRequestDispatcher("/message.jsp").forward(
