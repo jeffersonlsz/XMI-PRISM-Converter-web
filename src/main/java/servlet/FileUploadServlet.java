@@ -35,7 +35,7 @@ public class FileUploadServlet extends HttpServlet {
 //        // constructs path of the directory to save uploaded file
         String savePath = appPath + File.separator + SAVE_DIR;
         
-        System.out.println("app" + appPath + " " +  savePath);
+        System.out.println("save path: " + savePath);
 //         
 //        // creates the save directory if it does not exists
 //        File fileSaveDir = new File(savePath);
