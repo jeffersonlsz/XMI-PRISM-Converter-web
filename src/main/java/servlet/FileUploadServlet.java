@@ -1,8 +1,10 @@
 package servlet;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -71,9 +73,17 @@ public class FileUploadServlet extends HttpServlet {
         
         System.out.println("run on: " + uploadedFile.getAbsolutePath());
         Process proc = Runtime.getRuntime().exec("java -jar libs/xtp.jar "+uploadedFile.getAbsolutePath());
-        System.out.println("err: " + proc.getErrorStream().toString() + 
+        System.out.println("err: " + proc.getErrorStream().toString()  +
         		      " out: "+ proc.getOutputStream().toString() + 
         		      " outputf: "+savePath + File.separator + ffile);
+        BufferedReader errinput = new BufferedReader(new InputStreamReader(
+        		proc.getErrorStream()));
+        String ll=errinput.readLine();
+        
+        while(ll != null) {
+        	System.out.println(ll);
+        	ll=errinput.readLine();
+        }
         
         ffile = ffile.substring(0, ffile.indexOf('.'))+".pm";
         
