@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -76,26 +77,42 @@ public class FileUploadServlet extends HttpServlet {
         System.out.println("err: " + proc.getErrorStream().toString()  +
         		      " out: "+ proc.getOutputStream().toString() + 
         		      " outputf: "+savePath + File.separator + ffile);
+        
+        //outputs the error stream caused by the invoked process above
         BufferedReader errinput = new BufferedReader(new InputStreamReader(
         		proc.getErrorStream()));
-        String ll=errinput.readLine();
-        
+        String ll=errinput.readLine();  
         while(ll != null) {
         	System.out.println(ll);
         	ll=errinput.readLine();
         }
         
+        BufferedReader outputinput = new BufferedReader(new InputStreamReader(
+        		proc.getInputStream()));
+        StringBuilder sbo = new StringBuilder();
+        String ll1=outputinput.readLine();  
+        while(ll1 != null) {
+        	System.out.println(ll1);
+        	sbo.append(ll1 + "<br/>");
+        	ll1=outputinput.readLine();
+        }
+        request.setAttribute("outputxtp", sbo.toString());
+        
+        
         ffile = ffile.substring(0, ffile.indexOf('.'))+".pm";
         
-        Scanner in = new Scanner(new FileReader(savePath + File.separator +ffile));
+        String filePath = savePath + File.separator +ffile;
+        BufferedReader br = new BufferedReader(new FileReader(new File(filePath)));
         StringBuilder sb = new StringBuilder();
-        while(in.hasNext()) {
-            sb.append(in.next() + "<br/>");
+        String line;
+        while((line=br.readLine())!=null){
+        	System.out.println("line: "+line);
+        	sb.append(line+"</br>");
         }
-        in.close();
         
-        
-        request.setAttribute("prism", sb.toString());
+        String prismCode = sb.toString();
+        br.close();
+        request.setAttribute("prism", prismCode);
         
         
         getServletContext().getRequestDispatcher("/message.jsp").forward(
