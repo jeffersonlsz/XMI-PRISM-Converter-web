@@ -13,7 +13,7 @@
 <body>
 	<div class="bs-component">
 		<nav class="navbar navbar-expand-lg navbar-light bg-light"> <a
-			class="navbar-brand" href="#">Navbar</a>
+			class="navbar-brand" href="#">XMItoPRISM</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarColor03" aria-controls="navbarColor03"
 			aria-expanded="false" aria-label="Toggle navigation">
@@ -34,21 +34,41 @@
 		</div>
 		</nav>
 	</div>
-    
-	
-	<div class="bs-component">
-		<div class="alert alert-dismissible alert-warning">
-			<pre>
-				<code>${requestScope.outputxtp}</code>
+
+	<div class=".container">
+		<div class="row">
+			<div class="bs-component">
+				<div class="alert alert-dismissible alert-warning">
+					<pre>
+				<code>${requestScope.erroutputxtp}</code>
 			</pre>
+				</div>
+			</div>
+			   
 		</div>
-	</div>    
-	
-	<div class="bs-component">
-		<div class="jumbotron">
-			<pre>
+	</div>
+	<div class=".container">
+		<div class="row">
+			<div class="bs-component">
+				<div class="alert alert-dismissible alert-warning">
+					<pre>
+				<code>${requestScope.outputxtp}
+				      ${requestScope.outputxtperr}</code>
+			</pre>
+				</div>
+			</div>
+			    
+		</div>
+	</div>
+	<div class=".container">
+		<div class="row">
+			<div class="bs-component">
+				<div class="jumbotron">
+					<pre>
 				<code>${requestScope.prism}</code>
 			</pre>
+				</div>
+			</div>
 		</div>
 	</div>
 

@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -73,7 +74,15 @@ public class FileUploadServlet extends HttpServlet {
         //execute XMI2PRISM on the generated file....
         
         System.out.println("run on: " + uploadedFile.getAbsolutePath());
-        Process proc = Runtime.getRuntime().exec("java -jar libs/xtp.jar "+uploadedFile.getAbsolutePath());
+        
+        Process proc=null;
+        try{
+        	 proc = Runtime.getRuntime().exec("java -jar libs/xtp.jar "+uploadedFile.getAbsolutePath());
+        }catch(Exception e){
+        	
+            request.setAttribute("outputxtperr", e.getCause()+ ": "+e.getMessage());
+        }
+        
         System.out.println("err: " + proc.getErrorStream().toString()  +
         		      " out: "+ proc.getOutputStream().toString() + 
         		      " outputf: "+savePath + File.separator + ffile);
@@ -81,11 +90,13 @@ public class FileUploadServlet extends HttpServlet {
         //outputs the error stream caused by the invoked process above
         BufferedReader errinput = new BufferedReader(new InputStreamReader(
         		proc.getErrorStream()));
+        StringBuilder sboerr = new StringBuilder();
         String ll=errinput.readLine();  
         while(ll != null) {
         	System.out.println(ll);
         	ll=errinput.readLine();
         }
+        request.setAttribute("erroutputxtp", sboerr.toString());
         
         BufferedReader outputinput = new BufferedReader(new InputStreamReader(
         		proc.getInputStream()));
@@ -102,16 +113,36 @@ public class FileUploadServlet extends HttpServlet {
         ffile = ffile.substring(0, ffile.indexOf('.'))+".pm";
         
         String filePath = savePath + File.separator +ffile;
-        BufferedReader br = new BufferedReader(new FileReader(new File(filePath)));
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while((line=br.readLine())!=null){
-        	System.out.println("line: "+line);
-        	sb.append(line+"</br>");
-        }
+        String prismCode = null;
+        try{
         
-        String prismCode = sb.toString();
-        br.close();
+        
+        	BufferedReader brPrism = new BufferedReader(new FileReader(new File(filePath)));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while((line=brPrism.readLine())!=null){
+            	System.out.println("line: "+line);
+            	sb.append(line+"</br>");
+            }
+             prismCode = sb.toString();
+            brPrism.close();
+        }catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}finally {
+			//outputs the error stream caused by the invoked process above
+	        BufferedReader errinput1 = new BufferedReader(new InputStreamReader(
+	        		proc.getErrorStream()));
+	        StringBuilder sboerr1 = new StringBuilder();
+	        String ll11=errinput1.readLine();  
+	        while(ll11 != null) {
+	        	System.out.println(ll11);
+	        	ll11=errinput1.readLine();
+	        }
+	        request.setAttribute("erroutputxtp", sboerr1.toString());
+	       
+		}
+        
+        
         request.setAttribute("prism", prismCode);
         
         
