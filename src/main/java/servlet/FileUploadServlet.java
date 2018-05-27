@@ -109,10 +109,9 @@ public class FileUploadServlet extends HttpServlet {
         }
         request.setAttribute("outputxtp", sbo.toString());
         
+        String prismFileName = ffile.substring(0, ffile.indexOf('.'))+".pm";
         
-        ffile = ffile.substring(0, ffile.indexOf('.'))+".pm";
-        
-        String filePath = savePath + File.separator +ffile;
+        String filePath = savePath + File.separator +prismFileName;
         String prismCode = null;
         try{
         
